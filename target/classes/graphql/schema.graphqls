@@ -1,0 +1,94 @@
+# Order Management System schema
+
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.0",
+    import: ["@key", "@shareable", "@external", "@provides", "@extends"])
+
+"""Represents an order in the system."""
+type Order @key(fields: "id"){
+    """The unique identifier of the order."""
+    id: ID!
+    """The product included in the order."""
+    #product: Product!
+    productId: ID! @shareable
+    """The customer who placed the order."""
+    #customer: Customer!
+    customerId: ID! @shareable
+    """The quantity of the product in the order."""
+    quantity: Int!
+    """The date when the order was placed."""
+    orderDate: String!
+    """The shipping address for the order."""
+    shippingAddress: String
+    """The status of the order."""
+    orderStatus: OrderStatus!
+    """The date and time when the order was created."""
+    createdAt: String
+    """The date and time when the order was last updated."""
+    updatedAt: String
+    """The customer who placed the order."""
+    customer: Customer
+    """The product included in the order."""
+    product: Product
+}
+
+"""Represents the status of an order."""
+enum OrderStatus {
+    """The order is pending."""
+    PENDING
+    """The order is being processed."""
+    PROCESSING
+    """The order has been shipped."""
+    SHIPPED
+    """The order has been delivered."""
+    DELIVERED
+    """The order has been cancelled."""
+    CANCELLED
+}
+
+#"""External Customer type from Customer service"""
+type Customer @key(fields: "id") @extends{
+    id: ID! @external
+    #firstName: String! @external
+    #lastName: String! @external
+    #firstName: String! @shareable
+    #lastName: String! @shareable
+    #firstName: String! @external
+    #lastName: String! @external
+    #orders: [Order] @requires(fields: "id")
+}
+
+type Product @key(fields: "id") @extends {
+    id: ID! @external
+}
+
+type Query {
+    """Retrieve an order by its ID."""
+    getOrder(id: ID!): Order
+    """List all orders."""
+    listOrders: [Order!]
+    #"""Retrieve orders by customer ID."""
+    #ordersByCustomer(customerId: ID!): [Order!]!
+    """Retrieve orders by status."""
+    ordersByStatus(status: OrderStatus!): [Order!]!
+    """Retrieve orders by customer ID."""
+    ordersByCustomer(customerId: ID!): [Order!]!
+}
+
+type Mutation {
+    """Create a new order."""
+    createOrder(
+        productId: ID!
+        customerId: ID!
+        quantity: Int!
+        shippingAddress: String
+    ): Order
+    """Update an existing order."""
+    updateOrder(
+        id: ID!
+        quantity: Int
+        shippingAddress: String
+        orderStatus: OrderStatus
+    ): Order
+    """Cancel an order."""
+    cancelOrder(id: ID!): Boolean
+}

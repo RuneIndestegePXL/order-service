@@ -1,0 +1,6 @@
+be\pxl\services\orderservice\service\OrderService.class
+be\pxl\services\orderservice\repository\OrderRepository.class
+be\pxl\services\orderservice\domain\Order.class
+be\pxl\services\orderservice\domain\OrderStatus.class
+be\pxl\services\orderservice\controller\OrderController.class
+be\pxl\services\orderservice\OrderServiceApplication.class
