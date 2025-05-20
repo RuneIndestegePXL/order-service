@@ -14,6 +14,7 @@ public class Order {
     private long productId;
     private LocalDateTime orderDate;
     private String shippingAddress;
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     private LocalDateTime updatedAt;
 
